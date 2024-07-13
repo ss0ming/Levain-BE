@@ -56,6 +56,10 @@ public class Letter {
         if (this.isDeleted == null) {
             this.isDeleted = DeleteCheck.N; // 기본값 설정
         }
+
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now(); // createdAt 기본값 설정
+        }
     }
     @Override
     public String toString() {
