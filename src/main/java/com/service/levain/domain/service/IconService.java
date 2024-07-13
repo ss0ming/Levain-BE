@@ -26,9 +26,8 @@ public class IconService {
 
     private final MemberRepository memberRepository;
 
-    public ResponseEntity<?> purchaseIcon(PurchaseIconReqDto purchaseIconReqDto) {
-        // TODO: 회원에 임의 데이터를 넣었지만 후에 바꿔줘야함
-        Member member = memberRepository.findById("ellie_kim")
+    public ResponseEntity<?> purchaseIcon(PurchaseIconReqDto purchaseIconReqDto, String userName) {
+        Member member = memberRepository.findById(userName)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_MEMBER));
 
         // 아이콘을 구매할 수 있는지 확인
@@ -47,9 +46,8 @@ public class IconService {
         return ResponseUtils.createResponse(HttpStatus.OK, "아이콘 구매 성공");
     }
 
-    public ResponseEntity<?> getIcons() {
-        // TODO: 회원에 임의 데이터를 넣었지만 후에 바꿔줘야함
-        Member member = memberRepository.findById("ellie_kim")
+    public ResponseEntity<?> getIcons(String userName) {
+        Member member = memberRepository.findById(userName)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_MEMBER));
 
         List<Icon> icons = iconRepository.findIconNumByMember(member);
