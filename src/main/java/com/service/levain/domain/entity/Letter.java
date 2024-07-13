@@ -1,5 +1,6 @@
 package com.service.levain.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.service.levain.domain.dto.letter.request.ReqDTO;
 import com.service.levain.domain.enums.DeleteCheck;
 import jakarta.persistence.*;
@@ -39,6 +40,7 @@ public class Letter {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_name")
+    @JsonIgnore
     private Member member;
 
     // writer, content, iconNum만 포함하는 생성자
@@ -49,5 +51,22 @@ public class Letter {
         this.iconNum = reqDTO.getIconNum();
         this.member = member;
     }
-
+    @PrePersist
+    public void prePersist() {
+        if (this.isDeleted == null) {
+            this.isDeleted = DeleteCheck.N; // 기본값 설정
+        }
+    }
+    @Override
+    public String toString() {
+        return "Letter{" +
+                "letterId=" + letterId +
+                ", writer='" + writer + '\'' +
+                ", content='" + content + '\'' +
+                ", iconNum=" + iconNum +
+                ", createdAt=" + createdAt +
+                ", isDeleted=" + isDeleted +
+                ", member=" + member +
+                '}';
+    }
 }
