@@ -192,7 +192,6 @@ gradle-app.setting
 
 ### Gradle Patch ###
 # Java heap dump
-*.hprof
 
 
 ### application-my.yml
@@ -201,5 +200,8 @@ application-my.yml
 
 ### .DS_Store
 .DS_Store
+
+### Qclass ###
+**/src/main/generated/
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,intellij+all,gradle,java,visualstudiocode
