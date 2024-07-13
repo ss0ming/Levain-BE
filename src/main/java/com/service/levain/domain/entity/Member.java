@@ -29,7 +29,12 @@ public class Member {
     @ColumnDefault("0")
     private int reward;
 
+
+    public void updateReward(int reward) {
+        this.reward = reward;
+
     public static Member createMember(String username, String password, String nickname) {
         return new Member(username, password, nickname, 0);
+
     }
 }

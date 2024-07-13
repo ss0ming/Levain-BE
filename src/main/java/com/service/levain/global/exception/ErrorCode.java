@@ -17,6 +17,8 @@ public enum ErrorCode {
     FAILED_TO_LOGIN(HttpStatus.BAD_REQUEST, "UA006", "로그인에 실패했습니다. 아이디 또는 비밀번호를 확인해주세요."),
 
     // 아이콘 오류
+    NOT_EXIST_ICON(HttpStatus.BAD_REQUEST, "IC001", "존재하지 않는 아이콘"),
+    INSUFFICIENT_REWARDS(HttpStatus.BAD_REQUEST, "IC002", "리워드 부족"),
 
     // 편지 오류
 
