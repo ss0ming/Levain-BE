@@ -1,6 +1,6 @@
 package com.service.levain.domain.controller;
 
-import com.service.levain.domain.dto.icon.request.PurchaseIconReqDto;
+import com.service.levain.domain.dto.icons.request.PurchaseIconReqDto;
 import com.service.levain.domain.service.IconService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

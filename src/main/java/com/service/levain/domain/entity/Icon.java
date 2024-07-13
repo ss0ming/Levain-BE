@@ -1,6 +1,6 @@
 package com.service.levain.domain.entity;
 
-import com.service.levain.domain.dto.icon.request.PurchaseIconReqDto;
+import com.service.levain.domain.dto.icons.request.PurchaseIconReqDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
