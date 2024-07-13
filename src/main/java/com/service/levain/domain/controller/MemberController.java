@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.service.levain.domain.dto.member.request.PasswordCheckReqDto;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -33,5 +35,28 @@ public class MemberController {
         memberService.signUp(signUpReqDto);
 
         return ResponseUtils.createResponse(HttpStatus.OK, "회원 등록 성공");
+    }
+
+//    @GetMapping("/search")
+//    public ResponseEntity<?> searchMembers(
+//            @RequestParam(required = false) String searchType,
+//            @RequestParam(required = false) String searchKeyword
+//    ) {
+//        SearchReqDto searchReqDto = new SearchReqDto(searchType, searchKeyword);
+//        return ResponseUtils.createResponse(HttpStatus.OK,"페이지 완료" ,memberService.searchMembers(searchReqDto).getContent());
+//
+//    }
+
+    @GetMapping
+    public ResponseEntity<?> getMembers() {
+        return ResponseUtils.createResponse(HttpStatus.OK, "페이지 완료", memberService.getMembers());
+    }
+
+    @PutMapping("/password")
+    public ResponseEntity<?> join(@RequestBody PasswordCheckReqDto passwordDto) {
+
+        memberService.checkPasswordsMatch(passwordDto.getNewPassword(), passwordDto.getNewPasswordCheck());
+
+        return ResponseUtils.createResponse(HttpStatus.CREATED, "회원가입 완료", null);
     }
 }

@@ -14,10 +14,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.service.levain.domain.dto.member.response.MembersResDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -56,4 +60,25 @@ public class MemberService {
         Member member = Member.createMember(signUpReqDto.getUserName(), signUpReqDto.getPassword(), signUpReqDto.getNickname());
         memberRepository.save(member);
     }
+
+
+    @Transactional(readOnly = true)
+    public List<MembersResDto> getMembers() {
+        return memberRepository.findAll().stream()
+                .map(MembersResDto::new)
+                .collect(Collectors.toList());
+    }
+
+    public void checkPasswordsMatch(String password1, String password2) {
+        if(!password1.equals(password2)) {
+            throw new CustomException(ErrorCode.PASSWORD_MISMATCH);
+        }
+    }
+
+//    @Transactional
+//    public void checkPassword(String oldPassword) {
+//        if(memberRepository.findByPassword(oldPassword) == null) {
+//            throw new CustomException(ErrorCode.PASSWORD_MISMATCH);
+//        }
+//    }
 }

@@ -15,6 +15,13 @@ public enum ErrorCode {
     INVALID_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "UA004", "유효하지 않은 액세스 토큰입니다."),
     EXPIRED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "UA005", "만료된 액세스 토큰입니다."),
     FAILED_TO_LOGIN(HttpStatus.BAD_REQUEST, "UA006", "로그인에 실패했습니다. 아이디 또는 비밀번호를 확인해주세요."),
+    PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "UA007", "비밀번호가 일치하지 않습니다."),
+
+    // jwt 오류
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "JW001", "유효하지 않은 토큰입니다."),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED,"JW002", "만료된 토큰입니다."),
+    UNSUPPORTED_TOKEN(HttpStatus.BAD_REQUEST, "JW003","Unsupported token"),
+    EMPTY_TOKEN(HttpStatus.BAD_REQUEST,"JW004", "Empty token"),
 
     // 아이콘 오류
     NOT_EXIST_ICON(HttpStatus.BAD_REQUEST, "IC001", "존재하지 않는 아이콘"),
