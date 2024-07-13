@@ -1,6 +1,7 @@
 package com.service.levain.domain.service;
 
 import com.service.levain.domain.dto.member.request.LoginReqDto;
+import com.service.levain.domain.dto.member.request.PasswordCheckReqDto;
 import com.service.levain.domain.dto.member.request.SignUpReqDto;
 import com.service.levain.domain.entity.Member;
 import com.service.levain.domain.repository.MemberRepository;
@@ -64,21 +65,31 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public List<MembersResDto> getMembers() {
-        return memberRepository.findAll().stream()
+        List<MembersResDto> members = memberRepository.findAll().stream()
                 .map(MembersResDto::new)
                 .collect(Collectors.toList());
+
+        if (members.isEmpty()) {
+            throw new CustomException(ErrorCode.NO_MEMBERS_FOUND);
+        }
+
+        return members;
     }
 
-    public void checkPasswordsMatch(String password1, String password2) {
-        if(!password1.equals(password2)) {
+    public void updatePassword(PasswordCheckReqDto passwordCheckReqDto,String userName) {
+        if(!passwordCheckReqDto.getNewPassword().equals(passwordCheckReqDto.getNewPasswordCheck())) {
             throw new CustomException(ErrorCode.PASSWORD_MISMATCH);
         }
+        Member member = memberRepository.findById(userName)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_MEMBER));
+        String password = passwordCheckReqDto.getOldPassword();
+        if(!passwordEncoder.matches(password, member.getPassword())) {
+            throw new CustomException(ErrorCode.OLD_PASSWORD_MISMATCH);
+        }
+
+        String EncodedPassword = passwordEncoder.encode(password);
+        member.updatePassword(EncodedPassword);
+        memberRepository.save(member);
     }
 
-//    @Transactional
-//    public void checkPassword(String oldPassword) {
-//        if(memberRepository.findByPassword(oldPassword) == null) {
-//            throw new CustomException(ErrorCode.PASSWORD_MISMATCH);
-//        }
-//    }
 }

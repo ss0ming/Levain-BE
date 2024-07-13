@@ -39,4 +39,8 @@ public class Member {
         return new Member(userName, password, nickname, 0);
 
     }
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 }
