@@ -11,5 +11,6 @@ public class ReqDTO {
     private String content;
     private String writer;
     private int iconNum;
+    private String receiver;
     private String userName;
 }

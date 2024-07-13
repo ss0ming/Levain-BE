@@ -23,7 +23,7 @@ public class LetterService {
     private final MemberRepository memberRepository;
 
     public Letter saveLetter(ReqDTO reqDTO){
-        Optional<Member> optionalMember = memberRepository.findById(reqDTO.getUserName());
+        Optional<Member> optionalMember = memberRepository.findById(reqDTO.getReceiver());
         Member member = optionalMember.orElseThrow(() -> new RuntimeException("Member not found"));
 
         // reward 증가
