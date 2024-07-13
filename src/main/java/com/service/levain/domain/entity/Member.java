@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -37,5 +38,9 @@ public class Member {
     public static Member createMember(String userName, String password, String nickname) {
         return new Member(userName, password, nickname, 0);
 
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
     }
 }
