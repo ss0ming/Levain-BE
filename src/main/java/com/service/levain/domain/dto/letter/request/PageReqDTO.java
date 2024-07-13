@@ -6,16 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-@SuperBuilder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PageReqDTO {
-
-    @Builder.Default
-    private int page = 1;
-
-    @Builder.Default
-    private int size = 7;
+    private int page;
+    private String userName;
 
 }

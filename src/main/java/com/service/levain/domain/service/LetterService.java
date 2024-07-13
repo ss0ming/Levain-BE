@@ -1,8 +1,6 @@
 package com.service.levain.domain.service;
 
-import com.service.levain.domain.dto.letter.request.PageReqDTO;
 import com.service.levain.domain.dto.letter.request.ReqDTO;
-import com.service.levain.domain.dto.letter.response.PageResponseDTO;
 import com.service.levain.domain.entity.Letter;
 import com.service.levain.domain.entity.Member;
 import com.service.levain.domain.repository.LetterRepository;
