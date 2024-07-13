@@ -18,7 +18,7 @@ public class Icon {
     @Column
     private int iconNum;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "user_name")
     private Member member;
 

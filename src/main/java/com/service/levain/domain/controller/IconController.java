@@ -19,4 +19,8 @@ public class IconController {
         return iconService.purchaseIcon(purchaseIconReqDto);
     }
 
+    @GetMapping()
+    public ResponseEntity<?> getIcons() {
+        return iconService.getIcons();
+    }
 }

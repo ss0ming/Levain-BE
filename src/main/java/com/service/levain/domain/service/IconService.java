@@ -15,6 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class IconService {
@@ -42,5 +45,20 @@ public class IconService {
         memberRepository.save(member);
 
         return ResponseUtils.createResponse(HttpStatus.OK, "아이콘 구매 성공");
+    }
+
+    public ResponseEntity<?> getIcons() {
+        // TODO: 회원에 임의 데이터를 넣었지만 후에 바꿔줘야함
+        Member member = memberRepository.findById("ellie_kim")
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_MEMBER));
+
+        List<Icon> icons = iconRepository.findIconNumByMember(member);
+
+        List<Integer> iconNums = new ArrayList<>();
+        for (Icon icon : icons) {
+            iconNums.add(icon.getIconNum());
+        }
+
+        return ResponseUtils.createResponse(HttpStatus.OK, "구매 아이콘 목록 조회 성공", iconNums);
     }
 }
