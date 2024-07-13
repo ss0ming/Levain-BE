@@ -38,12 +38,12 @@ public class LetterController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("")
-    public ResponseEntity letterList(@RequestBody PageReqDTO reqDTO, @AuthenticationPrincipal UserDetails userDetails){
+    @GetMapping("/{page}")
+    public ResponseEntity letterList(@PathVariable("page") int page, @AuthenticationPrincipal UserDetails userDetails){
         System.out.println("회원 전체 편지 리스트 조회");
 
         String userName = userDetails.getUsername();
-        Page<Letter> paging = letterService.findAllLetter(reqDTO,userName);
+        Page<Letter> paging = letterService.findAllLetter(page,userName);
         return new ResponseEntity(paging, HttpStatus.OK);
     }
 

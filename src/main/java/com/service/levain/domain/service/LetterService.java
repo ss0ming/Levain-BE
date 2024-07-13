@@ -33,8 +33,8 @@ public class LetterService {
         return letterRepository.save(letter);
     }
 
-    public Page<Letter> findAllLetter(PageReqDTO pageReqDTO, String userName){
-        Pageable pageable = PageRequest.of(pageReqDTO.getPage(), pageReqDTO.getSize());
+    public Page<Letter> findAllLetter(int page, String userName){
+        Pageable pageable = PageRequest.of(page, 7);
         System.out.println(pageable);
         return letterRepository.findByMemberUserName(userName, pageable);
     }
