@@ -26,4 +26,8 @@ public class Member {
     @Column(name = "reward", nullable = false)
     @ColumnDefault("0")
     private int reward;
+
+    public void updateReward(int reward) {
+        this.reward = reward;
+    }
 }
