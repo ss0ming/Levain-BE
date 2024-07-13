@@ -11,6 +11,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -22,13 +24,13 @@ public class LetterController {
     private final LetterService letterService;
 
     @PostMapping("")
-    public ResponseEntity letterRegist(@RequestBody HashMap<String, Object>requestJsonMap, Authentication authentication){
+    public ResponseEntity letterRegist(@RequestBody HashMap<String, Object>requestJsonMap, @AuthenticationPrincipal UserDetails userDetails){
         String content = (String)requestJsonMap.get("content");
         String writer = (String)requestJsonMap.get("writer");
         int iconNum = (Integer)requestJsonMap.get("iconNum");
-        String userName = "tony_kang"; //임시
+        String receiver = (String)requestJsonMap.get("receiver");//받는이
 
-        ReqDTO reqDTO = new ReqDTO(content, writer, iconNum, userName);
+        ReqDTO reqDTO = new ReqDTO(content, writer, iconNum, receiver, userDetails.getUsername());
         System.out.println("reqDTO = "+ reqDTO);
 
         Letter isSuccess = letterService.saveLetter(reqDTO);
@@ -37,16 +39,11 @@ public class LetterController {
     }
 
     @GetMapping("")
-    public ResponseEntity letterList(@RequestBody PageReqDTO reqDTO, Authentication authentication){
+    public ResponseEntity letterList(@RequestBody PageReqDTO reqDTO, @AuthenticationPrincipal UserDetails userDetails){
         System.out.println("회원 전체 편지 리스트 조회");
 
-        String userName = "tony_kang";
+        String userName = userDetails.getUsername();
         Page<Letter> paging = letterService.findAllLetter(reqDTO,userName);
-        for(Letter l : paging) {
-            System.out.println(l);
-            Member m  = l.getMember();
-            m = null;
-        }
         return new ResponseEntity(paging, HttpStatus.OK);
     }
 
