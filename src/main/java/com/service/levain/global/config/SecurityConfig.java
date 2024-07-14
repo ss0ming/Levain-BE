@@ -1,67 +1,62 @@
 package com.service.levain.global.config;
 
+import com.service.levain.global.auth.jwt.component.JwtAccessDeniedHandler;
+import com.service.levain.global.auth.jwt.component.JwtAuthenticationEntryPoint;
+import com.service.levain.global.auth.jwt.component.JwtTokenProvider;
+import com.service.levain.global.auth.jwt.filter.JwtAuthenticationFilter;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 import java.util.Collections;
 
 @Configuration
+@EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final JwtTokenProvider jwtTokenProvider;
+
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors((cors) -> cors
-                        .configurationSource(new CorsConfigurationSource() {
-                            @Override
-                            public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
-                                CorsConfiguration corsConfiguration = new CorsConfiguration();
-
-                                corsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
-                                corsConfiguration.setAllowedMethods(Collections.singletonList("*"));
-                                corsConfiguration.setAllowedHeaders(Collections.singletonList("*"));
-                                corsConfiguration.setAllowCredentials(true);
-
-                                corsConfiguration.setExposedHeaders(Collections.singletonList("Authorization"));
-
-                                return corsConfiguration;
-                            }
-                        }));
-
-        http
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
-                .formLogin(AbstractHttpConfigurer::disable);
-//        http
-//                .exceptionHandling(exceptionHandling -> exceptionHandling
-//                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-//                        .accessDeniedHandler(new CustomAccessDeniedHandler()));
-        http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers( "/api/members/register", "/api/letters", "/api/members/login", "/api/members/registers").permitAll()
-                        .anyRequest().permitAll()
-                );
-
+            .httpBasic(AbstractHttpConfigurer::disable)
+            .csrf(AbstractHttpConfigurer::disable).formLogin(AbstractHttpConfigurer::disable)
+            .formLogin(AbstractHttpConfigurer::disable)
+            .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(exceptionHandling -> exceptionHandling
+                    .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                    .accessDeniedHandler(jwtAccessDeniedHandler)
+            )
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/api/users/login").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                    .anyRequest().authenticated()
+            )
+            .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
-    }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
