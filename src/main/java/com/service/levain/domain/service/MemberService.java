@@ -3,6 +3,7 @@ package com.service.levain.domain.service;
 import com.service.levain.domain.dto.member.request.LoginReqDto;
 import com.service.levain.domain.dto.member.request.PasswordCheckReqDto;
 import com.service.levain.domain.dto.member.request.SignUpReqDto;
+import com.service.levain.domain.dto.member.response.MemberResDto;
 import com.service.levain.domain.entity.Member;
 import com.service.levain.domain.repository.MemberRepository;
 import com.service.levain.global.auth.jwt.component.JwtTokenProvider;
@@ -74,6 +75,14 @@ public class MemberService {
         }
 
         return members;
+    }
+
+    @Transactional(readOnly = true)
+    public MemberResDto getMember(String userName) {
+        Member member = memberRepository.findById(userName)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_MEMBER));
+
+        return new MemberResDto(member);
     }
 
     public void updatePassword(PasswordCheckReqDto passwordCheckReqDto,String userName) {

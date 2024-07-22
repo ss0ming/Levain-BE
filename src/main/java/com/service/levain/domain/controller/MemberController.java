@@ -54,9 +54,14 @@ public class MemberController {
 //
 //    }
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<?> getMembers() {
         return ResponseUtils.createResponse(HttpStatus.OK, "페이지 완료", memberService.getMembers());
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getMember(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseUtils.createResponse(HttpStatus.OK, "회원 정보 조회 성공", memberService.getMember(userDetails.getUsername()));
     }
 
     @PutMapping("/password")
