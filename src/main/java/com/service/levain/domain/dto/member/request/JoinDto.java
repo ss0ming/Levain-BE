@@ -2,11 +2,11 @@ package com.service.levain.domain.dto.member.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @AllArgsConstructor
 public class JoinDto {
+
     private String userName;
     private String password;
     private String nickname;

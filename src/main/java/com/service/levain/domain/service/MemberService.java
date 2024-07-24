@@ -4,6 +4,7 @@ import com.service.levain.domain.dto.member.request.LoginReqDto;
 import com.service.levain.domain.dto.member.request.PasswordCheckReqDto;
 import com.service.levain.domain.dto.member.request.SignUpReqDto;
 import com.service.levain.domain.dto.member.response.MemberResDto;
+import com.service.levain.domain.dto.member.response.MembersResDto;
 import com.service.levain.domain.entity.Member;
 import com.service.levain.domain.repository.MemberRepository;
 import com.service.levain.global.auth.jwt.component.JwtTokenProvider;
@@ -16,12 +17,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import com.service.levain.domain.dto.member.response.MembersResDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-
 import java.util.List;
 import java.util.stream.Collectors;
 

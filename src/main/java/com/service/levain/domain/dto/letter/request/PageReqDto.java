@@ -7,10 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReqDTO {
-    private String content;
-    private String writer;
-    private int iconNum;
-    private String receiver;
+public class PageReqDto {
+    private int page;
     private String userName;
+
 }
