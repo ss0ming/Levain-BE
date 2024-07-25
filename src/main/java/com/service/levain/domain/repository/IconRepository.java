@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface IconRepository extends JpaRepository<Icon, Long> {
 
-    List<Icon> findIconNumByMember(Member member);
+//    List<Icon> findIconNumByMember(Member member);
 }
