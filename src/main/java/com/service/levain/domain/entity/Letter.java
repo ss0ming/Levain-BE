@@ -59,16 +59,4 @@ public class Letter {
             this.createdAt = LocalDateTime.now(); // createdAt 기본값 설정
         }
     }
-    @Override
-    public String toString() {
-        return "Letter{" +
-                "letterId=" + letterId +
-                ", writer='" + writer + '\'' +
-                ", content='" + content + '\'' +
-                ", iconNum=" + iconNum +
-                ", createdAt=" + createdAt +
-                ", isDeleted=" + isDeleted +
-                ", member=" + member +
-                '}';
-    }
 }
