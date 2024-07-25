@@ -1,15 +1,13 @@
 package com.service.levain.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.service.levain.domain.dto.letter.request.ReqDTO;
+import com.service.levain.domain.dto.letter.request.AddLetterReqDto;
 import com.service.levain.domain.enums.DeleteCheck;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static jakarta.persistence.GenerationType.*;
 
@@ -45,7 +43,7 @@ public class Letter {
 
     // writer, content, iconNum만 포함하는 생성자
     @Builder
-    public Letter(ReqDTO reqDTO, Member member) {
+    public Letter(AddLetterReqDto reqDTO, Member member) {
         this.writer = reqDTO.getWriter();
         this.content = reqDTO.getContent();
         this.iconNum = reqDTO.getIconNum();

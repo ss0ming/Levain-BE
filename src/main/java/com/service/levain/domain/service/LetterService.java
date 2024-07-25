@@ -1,10 +1,12 @@
 package com.service.levain.domain.service;
 
-import com.service.levain.domain.dto.letter.request.ReqDTO;
+import com.service.levain.domain.dto.letter.request.AddLetterReqDto;
 import com.service.levain.domain.entity.Letter;
 import com.service.levain.domain.entity.Member;
 import com.service.levain.domain.repository.LetterRepository;
 import com.service.levain.domain.repository.MemberRepository;
+import com.service.levain.global.exception.CustomException;
+import com.service.levain.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,15 +22,15 @@ public class LetterService {
     private final LetterRepository letterRepository;
     private final MemberRepository memberRepository;
 
-    public Letter saveLetter(ReqDTO reqDTO){
-        Optional<Member> optionalMember = memberRepository.findById(reqDTO.getReceiver());
-        Member member = optionalMember.orElseThrow(() -> new RuntimeException("Member not found"));
+    public void saveLetter(AddLetterReqDto addLetterReqDto, String userName){
+        Member member = memberRepository.findById(addLetterReqDto.getReceiver())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_MEMBER));
 
         // reward 증가
-        memberRepository.incrementReward(reqDTO.getUserName());
+        memberRepository.incrementReward(userName);
 
-        Letter letter = new Letter(reqDTO, member);
-        return letterRepository.save(letter);
+        Letter letter = new Letter(addLetterReqDto, member);
+        letterRepository.save(letter);
     }
 
     public Page<Letter> findAllLetter(int page, String userName){
