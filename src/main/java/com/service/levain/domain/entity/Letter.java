@@ -14,6 +14,7 @@ import static jakarta.persistence.GenerationType.*;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Letter {
 
     @Id
@@ -27,9 +28,6 @@ public class Letter {
     private String content;
 
     @Column
-    private int iconNum;
-
-    @Column
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -41,14 +39,14 @@ public class Letter {
     @JsonIgnore
     private Member member;
 
-    // writer, content, iconNum만 포함하는 생성자
-    @Builder
-    public Letter(AddLetterReqDto reqDTO, Member member) {
-        this.writer = reqDTO.getWriter();
-        this.content = reqDTO.getContent();
-        this.iconNum = reqDTO.getIconNum();
-        this.member = member;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "icon_id")
+    private Icon icon;
+
+    public static Letter createLetter(String writer, String content, Member member, Icon icon) {
+        return new Letter(null, writer, content, null, DeleteCheck.N, member, icon);
     }
+
     @PrePersist
     public void prePersist() {
         if (this.isDeleted == null) {
@@ -58,17 +56,5 @@ public class Letter {
         if (this.createdAt == null) {
             this.createdAt = LocalDateTime.now(); // createdAt 기본값 설정
         }
-    }
-    @Override
-    public String toString() {
-        return "Letter{" +
-                "letterId=" + letterId +
-                ", writer='" + writer + '\'' +
-                ", content='" + content + '\'' +
-                ", iconNum=" + iconNum +
-                ", createdAt=" + createdAt +
-                ", isDeleted=" + isDeleted +
-                ", member=" + member +
-                '}';
     }
 }

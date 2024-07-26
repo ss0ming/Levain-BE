@@ -2,6 +2,7 @@ package com.service.levain.domain.entity;
 
 import com.service.levain.domain.dto.icons.request.PurchaseIconReqDto;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Icon {
 
     @Id
@@ -16,22 +18,15 @@ public class Icon {
     private Long iconId;
 
     @Column
-    private int iconNum;
+    private String iconName;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_name")
-    private Member member;
+    @Column
+    private String icon_path;
 
-    @Builder
-    public Icon(int iconNum, Member member) {
-        this.iconNum = iconNum;
-        this.member = member;
-    }
+    @Column
+    private int price;
 
-    public static Icon purchaseOf(PurchaseIconReqDto dto, Member member) {
-        return Icon.builder()
-                .iconNum(dto.getIconNum())
-                .member(member)
-                .build();
+    public static Icon createIcon( String iconName, String icon_path, int price) {
+        return new Icon(null,iconName, icon_path, price);
     }
 }

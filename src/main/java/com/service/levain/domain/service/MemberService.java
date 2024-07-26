@@ -95,7 +95,7 @@ public class MemberService {
             throw new CustomException(ErrorCode.OLD_PASSWORD_MISMATCH);
         }
 
-        String EncodedPassword = passwordEncoder.encode(password);
+        String EncodedPassword = passwordEncoder.encode(passwordCheckReqDto.getNewPassword());
         member.updatePassword(EncodedPassword);
         memberRepository.save(member);
     }
