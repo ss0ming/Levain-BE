@@ -5,7 +5,6 @@ import com.service.levain.domain.dto.icon.response.IconPurchaseListResDto;
 import com.service.levain.domain.entity.Icon;
 import com.service.levain.domain.entity.Member;
 import com.service.levain.domain.entity.Purchase;
-import com.service.levain.domain.enums.Icons;
 import com.service.levain.domain.repository.IconRepository;
 import com.service.levain.domain.repository.MemberRepository;
 import com.service.levain.domain.repository.PurchaseRepository;
