@@ -1,5 +1,6 @@
 package com.service.levain.domain.controller;
 
+import com.service.levain.domain.dto.member.request.CurrentPasswordCheckReqDto;
 import com.service.levain.domain.dto.member.request.LoginReqDto;
 import com.service.levain.domain.dto.member.request.PasswordCheckReqDto;
 import com.service.levain.domain.dto.member.request.SignUpReqDto;
@@ -88,5 +89,11 @@ public class MemberController {
     public ResponseEntity<?> updatePassword(@RequestBody PasswordCheckReqDto passwordDto, @AuthenticationPrincipal UserDetails userDetails) {
         memberService.updatePassword(passwordDto, userDetails.getUsername());
         return ResponseUtils.createResponse(HttpStatus.OK, "비밀번호 수정 완료", null);
+    }
+
+    @PostMapping("/password/check")
+    public ResponseEntity<?> currentPasswordCheck(@RequestBody CurrentPasswordCheckReqDto passwordDto, @AuthenticationPrincipal UserDetails userDetails) {
+        memberService.currentPasswordCheck(userDetails.getUsername(),passwordDto.getOldPassword());
+        return ResponseUtils.createResponse(HttpStatus.OK, "비밀번호 확인 완료", null);
     }
 }

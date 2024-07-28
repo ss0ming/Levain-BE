@@ -2,6 +2,7 @@ package com.service.levain.domain.controller;
 
 import com.service.levain.domain.dto.letter.request.AddLetterReqDto;
 import com.service.levain.domain.dto.letter.request.PageReqDto;
+import com.service.levain.domain.dto.letter.response.LetterResDto;
 import com.service.levain.domain.entity.Letter;
 import com.service.levain.domain.service.LetterService;
 import com.service.levain.global.common.ResponseUtils;
@@ -17,28 +18,29 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/letters")
 public class LetterController {
-//
-//    private final LetterService letterService;
-//
-//    /**
-//     * 편지 등록 API
-//     */
-//    @PostMapping
-//    public ResponseEntity<?> letterRegister(@RequestBody AddLetterReqDto addLetterReqDto, @AuthenticationPrincipal UserDetails userDetails){
-//        letterService.saveLetter(addLetterReqDto, userDetails.getUsername());
-//
-//        return ResponseUtils.createResponse(HttpStatus.OK, "편지 등록 성공");
-//    }
-//
-//    /**
-//     * 편지 목록 조회 API
-//     */
-//    @GetMapping
-//    public ResponseEntity<?> letterAnotherList(PageReqDto pageReqDTO){
-//        Page<Letter> paging = letterService.findAllLetter(pageReqDTO.getPage(),pageReqDTO.getUserName());
-//
-//        return ResponseUtils.createResponse(HttpStatus.OK, "편지 목록 조회 성공", paging);
-//    }
+
+    private final LetterService letterService;
+
+    /**
+     * 편지 등록 API
+     */
+    @PostMapping
+    public ResponseEntity<?> letterRegister(@RequestBody AddLetterReqDto addLetterReqDto, @AuthenticationPrincipal UserDetails userDetails){
+        System.out.println(addLetterReqDto);
+
+        letterService.createLetter(addLetterReqDto, userDetails.getUsername());
+        return ResponseUtils.createResponse(HttpStatus.OK, "편지 등록 성공");
+    }
+
+    /**
+     * 편지 목록 조회 API
+     */
+    @GetMapping
+    public ResponseEntity<?> letterAnotherList(@RequestBody PageReqDto pageReqDTO){
+        Page<LetterResDto> paging = letterService.getLettersByUser(pageReqDTO.getPage(),pageReqDTO.getUserName());
+
+        return ResponseUtils.createResponse(HttpStatus.OK, "편지 목록 조회 성공", paging);
+    }
 //
 //    /**
 //     * 로그인 한 회원의 편지 목록 조회 API
@@ -51,13 +53,12 @@ public class LetterController {
 //        return ResponseUtils.createResponse(HttpStatus.OK, "로그인 한 회원의 편지 목록 조회 성공", paging);
 //    }
 //
-//    /**
-//     * 편지 단일 조회 API
-//     */
-//    @GetMapping("/{letterId}")
-//    public ResponseEntity<?> viewLetter(@PathVariable("letterId") Long letterId){
-//        Letter letter = letterService.findOneLetter(letterId);
-//
-//        return ResponseUtils.createResponse(HttpStatus.OK, "편지 단일 조회 성공", letter);
-//    }
+    /**
+     * 편지 단일 조회 API
+     */
+    @GetMapping("/{letterId}")
+    public ResponseEntity<?> viewLetter(@PathVariable("letterId") Long letterId){
+
+        return ResponseUtils.createResponse(HttpStatus.OK, "편지 단일 조회 성공", letterService.findOneLetter(letterId));
+    }
 }

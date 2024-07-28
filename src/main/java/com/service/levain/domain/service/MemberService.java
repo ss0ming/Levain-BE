@@ -84,6 +84,7 @@ public class MemberService {
         return new MemberResDto(member);
     }
 
+    @Transactional
     public void updatePassword(PasswordCheckReqDto passwordCheckReqDto,String userName) {
         if(!passwordCheckReqDto.getNewPassword().equals(passwordCheckReqDto.getNewPasswordCheck())) {
             throw new CustomException(ErrorCode.PASSWORD_MISMATCH);
@@ -100,4 +101,11 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+
+    @Transactional(readOnly = true)
+    public void currentPasswordCheck(String userName, String password) {
+        if(!passwordEncoder.matches(password, memberRepository.findById(userName).get().getPassword())) {
+            throw new CustomException(ErrorCode.PASSWORD_MISMATCH);
+        }
+    }
 }

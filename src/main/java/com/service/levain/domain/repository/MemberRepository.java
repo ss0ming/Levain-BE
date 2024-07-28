@@ -12,4 +12,6 @@ public interface MemberRepository extends JpaRepository<Member, String>{
     @Transactional
     @Query("update Member m set m.reward = m.reward + 1 where m.userName = :userName")
     void incrementReward(@Param("userName") String userName);
+
+    boolean existsByUserName(String userName);
 }

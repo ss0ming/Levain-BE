@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class AddLetterReqDto {
     private String content;
     private String writer;
-    private int iconNum;
+    private Long iconId;
     private String receiver;
 }
