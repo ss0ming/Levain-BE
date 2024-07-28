@@ -51,6 +51,7 @@ public class SecurityConfig {
                     .accessDeniedHandler(jwtAccessDeniedHandler)
             )
             .authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/img/**","/images/**").permitAll()  // 이미지 경로 허용
                     .requestMatchers("/api/users/login").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                     .anyRequest().authenticated()
