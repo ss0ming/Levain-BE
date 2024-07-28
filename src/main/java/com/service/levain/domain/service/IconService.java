@@ -138,8 +138,6 @@ public class IconService {
     //TODO : 아이콘 삭제
 
     private void deductRewardIfPossible(Member member, int iconPrice) {
-        System.out.println("member.getNickname() = " + member.getNickname());
-        System.out.println("member.getReward() = " + member.getReward());
         if (!Utils.isPossiblePurchase(member.getReward(), iconPrice)) {
             throw new CustomException(ErrorCode.INSUFFICIENT_REWARDS);
         }

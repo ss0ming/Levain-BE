@@ -37,7 +37,8 @@ public enum ErrorCode {
     FILE_NOT_FOUND(HttpStatus.BAD_REQUEST, "FI001", "파일을 찾을 수 없습니다."),
     FILE_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "FI002", "파일 크기가 초과되었습니다."),
 
-
+    // 구매 오류
+    ALREADY_PURCHASED(HttpStatus.BAD_REQUEST, "PU001", "이미 구매한 아이콘입니다."),
 
     // 서버 오류
     SEVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "SV001", "서버 오류");
