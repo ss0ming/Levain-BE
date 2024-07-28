@@ -5,9 +5,11 @@ import com.service.levain.domain.dto.icon.response.IconPurchaseListResDto;
 import com.service.levain.domain.entity.Icon;
 import com.service.levain.domain.entity.Member;
 import com.service.levain.domain.entity.Purchase;
+import com.service.levain.domain.enums.Icons;
 import com.service.levain.domain.repository.IconRepository;
 import com.service.levain.domain.repository.MemberRepository;
 import com.service.levain.domain.repository.PurchaseRepository;
+import com.service.levain.domain.utils.Utils;
 import com.service.levain.global.exception.CustomException;
 import com.service.levain.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -87,24 +89,28 @@ public class IconService {
             throw new CustomException(FILE_NOT_FOUND);
         }
 
+        Member member = memberRepository.findById(userName)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_MEMBER));
+
+        // 아이콘을 등록하기 위한 reward를 확인
+        deductRewardIfPossible(member, price);
+
         String originalImageName = createIconReqDto.getIconImage().getOriginalFilename();
 
         Icon savedIcon = null;
         try {
             String imgName = fileService.uploadFile(iconImageLocation, originalImageName, createIconReqDto.getIconImage().getBytes());
             String imgUrl = "/img/icon/" + imgName;
-            Icon icon= Icon.createIcon(iconName, imgUrl, price);
+            Icon icon = Icon.createIcon(iconName, imgUrl, price);
             savedIcon = iconRepository.save(icon);
         } catch (IOException e) {
             log.error("파일 업로드 중 문제 발생", e);
             throw new CustomException(FILE_UPLOAD_FAILED);
         }
 
-        Member member = memberRepository.findById(userName)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXIST_MEMBER));
 
         // 아이콘을 등록한 회원은 기본적으로 아이콘을 지급해줌.
-        Purchase purchase = Purchase.createPurchase(member,savedIcon);
+        Purchase purchase = Purchase.createPurchase(member, savedIcon);
         purchaseRepository.save(purchase);
     }
 
@@ -123,11 +129,21 @@ public class IconService {
 
         // 아이콘 목록에 구매 여부 정보 추가
         List<IconPurchaseListResDto> iconDtos = icons.stream()
-                .map(icon -> IconPurchaseListResDto.of(icon.getIconId(),icon.getIconName(),icon.getIconPath(),icon.getPrice(),purchasedIconIds.contains(icon.getIconId())))
+                .map(icon -> IconPurchaseListResDto.of(icon.getIconId(), icon.getIconName(), icon.getIconPath(), icon.getPrice(), purchasedIconIds.contains(icon.getIconId())))
                 .toList();
 
         return iconDtos;
     }
 
     //TODO : 아이콘 삭제
+
+    private void deductRewardIfPossible(Member member, int iconPrice) {
+        System.out.println("member.getNickname() = " + member.getNickname());
+        System.out.println("member.getReward() = " + member.getReward());
+        if (!Utils.isPossiblePurchase(member.getReward(), iconPrice)) {
+            throw new CustomException(ErrorCode.INSUFFICIENT_REWARDS);
+        }
+        member.updateReward(member.getReward() - iconPrice);
+        memberRepository.save(member);
+    }
 }
