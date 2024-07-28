@@ -17,18 +17,19 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/letters")
 public class LetterController {
-//
-//    private final LetterService letterService;
-//
-//    /**
-//     * 편지 등록 API
-//     */
-//    @PostMapping
-//    public ResponseEntity<?> letterRegister(@RequestBody AddLetterReqDto addLetterReqDto, @AuthenticationPrincipal UserDetails userDetails){
-//        letterService.saveLetter(addLetterReqDto, userDetails.getUsername());
-//
-//        return ResponseUtils.createResponse(HttpStatus.OK, "편지 등록 성공");
-//    }
+
+    private final LetterService letterService;
+
+    /**
+     * 편지 등록 API
+     */
+    @PostMapping
+    public ResponseEntity<?> letterRegister(@RequestBody AddLetterReqDto addLetterReqDto, @AuthenticationPrincipal UserDetails userDetails){
+        System.out.println(addLetterReqDto);
+
+        letterService.createLetter(addLetterReqDto, userDetails.getUsername());
+        return ResponseUtils.createResponse(HttpStatus.OK, "편지 등록 성공");
+    }
 //
 //    /**
 //     * 편지 목록 조회 API
