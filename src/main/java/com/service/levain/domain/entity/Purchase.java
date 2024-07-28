@@ -20,6 +20,10 @@ public class Purchase {
     private Member member;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "icon_id")
     private Icon icon;
+
+    public static Purchase createPurchase(Member member, Icon icon) {
+        return new Purchase(null, member, icon);
+    }
 }

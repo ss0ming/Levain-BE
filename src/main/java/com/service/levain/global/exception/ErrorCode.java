@@ -28,8 +28,16 @@ public enum ErrorCode {
     // 아이콘 오류
     NOT_EXIST_ICON(HttpStatus.BAD_REQUEST, "IC001", "존재하지 않는 아이콘"),
     INSUFFICIENT_REWARDS(HttpStatus.BAD_REQUEST, "IC002", "리워드 부족"),
+    PAYLOAD_TOO_LARGE(HttpStatus.PAYLOAD_TOO_LARGE, "FI003", "파일 크기가 너무 큽니다."),
+    FILE_UPLOAD_FAILED(HttpStatus.BAD_REQUEST, "FI004", "파일 업로드에 실패했습니다."),
 
     // 편지 오류
+
+    // 이미지 파일 오류
+    FILE_NOT_FOUND(HttpStatus.BAD_REQUEST, "FI001", "파일을 찾을 수 없습니다."),
+    FILE_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "FI002", "파일 크기가 초과되었습니다."),
+
+
 
     // 서버 오류
     SEVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "SV001", "서버 오류");
