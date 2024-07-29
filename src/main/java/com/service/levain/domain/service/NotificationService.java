@@ -27,7 +27,7 @@ public class NotificationService {
         return emitter;
     }
 
-    pubilc <T> void customNotify(String userName, T data, String comment, String type) {
+    public <T> void customNotify(String userName, T data, String comment, String type) {
         sendToClient(userName, data, comment, type);
     }
 
