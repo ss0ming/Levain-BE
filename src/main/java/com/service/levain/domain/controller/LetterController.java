@@ -3,6 +3,7 @@ package com.service.levain.domain.controller;
 import com.service.levain.domain.dto.letter.request.AddLetterReqDto;
 import com.service.levain.domain.dto.letter.request.PageReqDto;
 import com.service.levain.domain.dto.letter.response.LetterResDto;
+import com.service.levain.domain.dto.page.response.PageResponse;
 import com.service.levain.domain.entity.Letter;
 import com.service.levain.domain.service.LetterService;
 import com.service.levain.global.common.ResponseUtils;
@@ -37,10 +38,12 @@ public class LetterController {
      */
     @GetMapping
     public ResponseEntity<?> letterAnotherList(@RequestParam int page,@RequestParam String userName){
-        Page<LetterResDto> paging = letterService.getLettersByUser(page,userName);
 
-        return ResponseUtils.createResponse(HttpStatus.OK, "편지 목록 조회 성공", paging);
+        PageResponse<LetterResDto> response = letterService.getLettersByUser(page, userName);
+
+        return ResponseUtils.createResponse(HttpStatus.OK, "편지 목록 조회 성공", response);
     }
+
 //
 //    /**
 //     * 로그인 한 회원의 편지 목록 조회 API

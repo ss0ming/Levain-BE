@@ -2,6 +2,7 @@ package com.service.levain.domain.service;
 
 import com.service.levain.domain.dto.letter.request.AddLetterReqDto;
 import com.service.levain.domain.dto.letter.response.LetterResDto;
+import com.service.levain.domain.dto.page.response.PageResponse;
 import com.service.levain.domain.entity.Icon;
 import com.service.levain.domain.entity.Letter;
 import com.service.levain.domain.entity.Member;
@@ -55,7 +56,7 @@ public class LetterService {
     }
 
     @Transactional(readOnly = true)
-    public Page<LetterResDto> getLettersByUser(int page, String userName) {
+    public PageResponse<LetterResDto> getLettersByUser(int page, String userName) {
         Pageable pageable = PageRequest.of(page, 7, Sort.by("createdAt").descending());
 
         if(!memberRepository.existsByUserName(userName)) {
@@ -63,9 +64,11 @@ public class LetterService {
         }
 
         Page<Letter> lettersPage = letterRepository.findByMemberUserName(userName, pageable);
+        Page<LetterResDto> letterResDtoPage = lettersPage.map(LetterResDto::from);
 
-        return lettersPage.map(LetterResDto::from);
+        return new PageResponse<>(letterResDtoPage);
     }
+
 
     @Transactional(readOnly = true)
     public LetterResDto findOneLetter(Long letterId){
