@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class PageReqDto {
     private int page;
     private String userName;
-
 }

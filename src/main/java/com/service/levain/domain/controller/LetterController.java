@@ -36,8 +36,8 @@ public class LetterController {
      * 편지 목록 조회 API
      */
     @GetMapping
-    public ResponseEntity<?> letterAnotherList(@RequestBody PageReqDto pageReqDTO){
-        Page<LetterResDto> paging = letterService.getLettersByUser(pageReqDTO.getPage(),pageReqDTO.getUserName());
+    public ResponseEntity<?> letterAnotherList(@RequestParam int page,@RequestParam String userName){
+        Page<LetterResDto> paging = letterService.getLettersByUser(page,userName);
 
         return ResponseUtils.createResponse(HttpStatus.OK, "편지 목록 조회 성공", paging);
     }

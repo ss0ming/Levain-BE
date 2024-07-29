@@ -1,7 +1,9 @@
 package com.service.levain.domain.controller;
 
 import com.service.levain.domain.dto.icon.request.CreateIconReqDto;
+import com.service.levain.domain.dto.purchase.request.PurchaseIconReqDto;
 import com.service.levain.domain.service.IconService;
+import com.service.levain.domain.service.PurchaseService;
 import com.service.levain.global.common.ResponseUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class IconController {
 
     private final IconService iconService;
+    private final PurchaseService purchaseService;
 //
 //    /**
 //     * 아이콘 구매 API
@@ -47,4 +50,11 @@ public class IconController {
         return ResponseUtils.createResponse(HttpStatus.OK, "아이콘 조회 성공" ,iconService.getAllIconsWithPurchaseStatus(userName));
     }
 
+
+    @PostMapping("/purchase")
+    public ResponseEntity<?> purchaseIcon(@RequestBody PurchaseIconReqDto purchaseReqDto, @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        purchaseService.purchaseIcon(username, purchaseReqDto.getIconId());
+        return ResponseUtils.createResponse(HttpStatus.OK, "아이콘 구매 성공");
+    }
 }

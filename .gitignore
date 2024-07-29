@@ -200,7 +200,7 @@ application-my.yml
 ### .DS_Store
 .DS_Store
 
-# image 파일 안들어가게
-!resources/static/icon/**
+# Ignore all files under resources/static/icon
+resources/static/icon/**
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,intellij+all,gradle,java,visualstudiocode
