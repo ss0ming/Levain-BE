@@ -201,6 +201,6 @@ application-my.yml
 .DS_Store
 
 # Ignore all files under resources/static/icon
-resources/static/icon/**
+src/main/resources/static/icon/**
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,intellij+all,gradle,java,visualstudiocode
