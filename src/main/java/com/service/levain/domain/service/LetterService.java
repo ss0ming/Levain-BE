@@ -57,7 +57,7 @@ public class LetterService {
 
     @Transactional(readOnly = true)
     public PageResponse<LetterResDto> getLettersByUser(int page, String userName) {
-        Pageable pageable = PageRequest.of(page, 7, Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(page, 7, Sort.by("createdAt").ascending());
 
         if(!memberRepository.existsByUserName(userName)) {
             throw new CustomException(NOT_EXIST_MEMBER);
