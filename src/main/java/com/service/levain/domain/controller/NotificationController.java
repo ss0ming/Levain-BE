@@ -2,6 +2,7 @@ package com.service.levain.domain.controller;
 
 import com.service.levain.domain.service.NotificationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +15,7 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @GetMapping()
+    @GetMapping(value = "/api/subscribe", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter subscribe(@AuthenticationPrincipal UserDetails userDetails) {
         return notificationService.subscribe(userDetails.getUsername());
     }
