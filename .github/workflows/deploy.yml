@@ -70,7 +70,7 @@ jobs:
 
       - name: Copy JAR to EC2
         run: |
-          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa levain-0.0.1-SNAPSHOT.jar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/kkangtong-0.0.1-SNAPSHOT.jar
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa levain-0.0.1-SNAPSHOT.jar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/levain-0.0.1-SNAPSHOT.jar
         # 빌드된 JAR 파일을 SCP를 사용하여 EC2 인스턴스로 복사함
 
       - name: SSH and Run JAR
