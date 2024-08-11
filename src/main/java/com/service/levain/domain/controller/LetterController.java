@@ -1,63 +1,80 @@
 package com.service.levain.domain.controller;
 
-import com.service.levain.domain.dto.letter.request.PageReqDTO;
-import com.service.levain.domain.dto.letter.request.ReqDTO;
-import com.service.levain.domain.entity.Letter;
-import com.service.levain.domain.entity.Member;
+import com.service.levain.domain.dto.letter.request.AddLetterReqDto;
+import com.service.levain.domain.dto.letter.response.LetterResDto;
+import com.service.levain.domain.dto.page.response.PageResponse;
+import com.service.levain.domain.dto.notification.response.LetterSseResDto;
 import com.service.levain.domain.service.LetterService;
+import com.service.levain.domain.service.NotificationService;
+import com.service.levain.domain.utils.Time;
+import com.service.levain.global.common.ResponseUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/letters")
 public class LetterController {
+
     private final LetterService letterService;
 
-    @PostMapping("")
-    public ResponseEntity letterRegist(@RequestBody HashMap<String, Object>requestJsonMap, @AuthenticationPrincipal UserDetails userDetails){
-        String content = (String)requestJsonMap.get("content");
-        String writer = (String)requestJsonMap.get("writer");
-        int iconNum = (Integer)requestJsonMap.get("iconNum");
-        String receiver = (String)requestJsonMap.get("receiver");//받는이
+    private final NotificationService notificationService;
 
-        ReqDTO reqDTO = new ReqDTO(content, writer, iconNum, receiver, userDetails.getUsername());
-        System.out.println("reqDTO = "+ reqDTO);
+    /**
+     * 편지 등록 API
+     */
+    @PostMapping
+    public ResponseEntity<?> letterRegister(@RequestBody AddLetterReqDto addLetterReqDto, @AuthenticationPrincipal UserDetails userDetails){
+        System.out.println(addLetterReqDto);
 
-        Letter isSuccess = letterService.saveLetter(reqDTO);
-        System.out.println("isSuccess = " + isSuccess);
-        return new ResponseEntity(HttpStatus.OK);
+        letterService.createLetter(addLetterReqDto, userDetails.getUsername());
+
+        LetterSseResDto letterSseResDto = LetterSseResDto.builder()
+                .userName(addLetterReqDto.getReceiver())
+                .receivedTime(Time.calculateTime(LocalDateTime.now(ZoneId.of("Asia/Seoul"))))
+                .build();
+
+        notificationService.customNotify(addLetterReqDto.getReceiver(), letterSseResDto, "편지가 도착했습니다.", "letter");
+
+        return ResponseUtils.createResponse(HttpStatus.OK, "편지 등록 성공");
     }
 
-    @GetMapping("")
-    public ResponseEntity letterAnotherList(PageReqDTO pageReqDTO){
-        System.out.println("다른 회원 전체 편지 리스트 조회");
-        System.out.println(pageReqDTO);
-        Page<Letter> paging = letterService.findAllLetter(pageReqDTO.getPage(),pageReqDTO.getUserName());
-        return new ResponseEntity(paging, HttpStatus.OK);
+    /**
+     * 편지 목록 조회 API
+     */
+    @GetMapping
+    public ResponseEntity<?> letterAnotherList(@RequestParam int page,@RequestParam String userName){
+
+        PageResponse<LetterResDto> response = letterService.getLettersByUser(page, userName);
+
+        return ResponseUtils.createResponse(HttpStatus.OK, "편지 목록 조회 성공", response);
     }
 
-    @GetMapping("/{page}")
-    public ResponseEntity letterList(@PathVariable("page") int page, @AuthenticationPrincipal UserDetails userDetails){
-        System.out.println("회원 전체 편지 리스트 조회");
+//
+//    /**
+//     * 로그인 한 회원의 편지 목록 조회 API
+//     */
+//    @GetMapping("/{page}")
+//    public ResponseEntity<?> letterList(@PathVariable("page") int page, @AuthenticationPrincipal UserDetails userDetails){
+//        String userName = userDetails.getUsername();
+//        Page<Letter> paging = letterService.findAllLetter(page, userName);
+//
+//        return ResponseUtils.createResponse(HttpStatus.OK, "로그인 한 회원의 편지 목록 조회 성공", paging);
+//    }
 
-        String userName = userDetails.getUsername();
-        Page<Letter> paging = letterService.findAllLetter(page,userName);
-        return new ResponseEntity(paging, HttpStatus.OK);
-    }
-
+    /**
+     * 편지 단일 조회 API
+     */
     @GetMapping("/{letterId}")
-    public ResponseEntity viewLetter(@PathVariable("letterId") Long letterId){
-        Letter letter = letterService.findOneLetter(letterId);
-        return new ResponseEntity<>(letter, HttpStatus.OK);
+    public ResponseEntity<?> viewLetter(@PathVariable("letterId") Long letterId){
+
+        return ResponseUtils.createResponse(HttpStatus.OK, "편지 단일 조회 성공", letterService.findOneLetter(letterId));
     }
 }

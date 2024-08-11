@@ -1,4 +1,4 @@
-package com.service.levain.domain.dto.icons.request;
+package com.service.levain.domain.dto.icon.request;
 
 import lombok.Getter;
 import lombok.Setter;

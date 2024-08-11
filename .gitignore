@@ -121,8 +121,6 @@ replay_pid*
 .AppleDouble
 .LSOverride
 
-# Icon must end with two \r
-Icon
 
 
 # Thumbnails
@@ -201,5 +199,8 @@ application-my.yml
 
 ### .DS_Store
 .DS_Store
+
+# Ignore all files under resources/static/icon
+src/main/resources/static/icon/**
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,intellij+all,gradle,java,visualstudiocode

@@ -1,8 +1,12 @@
 package com.service.levain.domain.controller;
 
-import com.service.levain.domain.dto.icons.request.PurchaseIconReqDto;
+import com.service.levain.domain.dto.icon.request.CreateIconReqDto;
+import com.service.levain.domain.dto.purchase.request.PurchaseIconReqDto;
 import com.service.levain.domain.service.IconService;
+import com.service.levain.domain.service.PurchaseService;
+import com.service.levain.global.common.ResponseUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,14 +18,43 @@ import org.springframework.web.bind.annotation.*;
 public class IconController {
 
     private final IconService iconService;
+    private final PurchaseService purchaseService;
+//
+//    /**
+//     * 아이콘 구매 API
+//     */
+//    @PostMapping
+//    public ResponseEntity<?> purchaseIcon(@RequestBody PurchaseIconReqDto purchaseIconReqDto, @AuthenticationPrincipal UserDetails userDetails) {
+//        return iconService.purchaseIcon(purchaseIconReqDto, userDetails.getUsername());
+//    }
+//
+//    /**
+//     * 구매 아이콘 목록 조회 API
+//     */
+//    @GetMapping
+//    public ResponseEntity<?> getIcons(@AuthenticationPrincipal UserDetails userDetails) {
+//        return iconService.getIcons(userDetails.getUsername());
+//    }
+    @PostMapping
+    public ResponseEntity<?> createIcon(CreateIconReqDto createIconReqDto, @AuthenticationPrincipal UserDetails userDetails) {
 
-    @PostMapping()
-    public ResponseEntity<?> purchaseIcon(@RequestBody PurchaseIconReqDto purchaseIconReqDto, @AuthenticationPrincipal UserDetails userDetails) {
-        return iconService.purchaseIcon(purchaseIconReqDto, userDetails.getUsername());
+        String userName = userDetails.getUsername();
+        iconService.createIcon(createIconReqDto, userName);
+
+        return ResponseUtils.createResponse(HttpStatus.OK, "아이콘 생성 성공");
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<?> getIcons(@AuthenticationPrincipal UserDetails userDetails) {
-        return iconService.getIcons(userDetails.getUsername());
+        String userName = userDetails.getUsername();
+        return ResponseUtils.createResponse(HttpStatus.OK, "아이콘 조회 성공" ,iconService.getAllIconsWithPurchaseStatus(userName));
+    }
+
+
+    @PostMapping("/purchase")
+    public ResponseEntity<?> purchaseIcon(@RequestBody PurchaseIconReqDto purchaseReqDto, @AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        purchaseService.purchaseIcon(username, purchaseReqDto.getIconId());
+        return ResponseUtils.createResponse(HttpStatus.OK, "아이콘 구매 성공");
     }
 }
