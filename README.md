@@ -33,9 +33,3 @@
 --- | --- | 
 <img width="1512" alt="스크린샷 2024-09-16 오후 9 49 43" src="https://github.com/user-attachments/assets/2173881e-9784-40be-8003-09a0e9f19db3">|<img width="1512" alt="스크린샷 2024-09-16 오후 9 51 59" src="https://github.com/user-attachments/assets/96bc65cd-3f80-42dc-b3bd-e8ffe0e02798">
 
-### 📋 ERD
-
-### 📄 API 명세서
-
-
-### 🌐 Architecture
